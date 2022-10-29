@@ -4,6 +4,7 @@ const app = express(); //create an instance
 const { simpsons } = require("./data/simpsons");
 const { checkToken } = require("./middleware/auth");
 const { getUniqueId } = require("./utils");
+const { addToLog } = require("./middleware/logging");
 
 simpsons.forEach((element) => {
   element.id = getUniqueId(16);

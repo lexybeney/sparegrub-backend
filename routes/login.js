@@ -1,5 +1,4 @@
 const express = require("express");
-const { simpsons } = require("../data/simpsons");
 const { getUniqueId } = require("../utils");
 const router = express.Router();
 
@@ -16,11 +15,13 @@ router.post("/", (req, res) => {
 
   //if the user/pass match then generate a token and send to the user
   if (indexOfUser > -1) {
+    if (!simpsons[indexOfUser].tokens) {
+      simpsons[indexOfUser].tokens = [];
+    }
+    const tokens = simpsons[indexOfUser].tokens;
     const token = getUniqueId(64);
-
-    simpsons[indexOfUser].token = token;
-
-    res.send({ status: 1, token });
+    simpsons[indexOfUser].tokens.push(token);
+    res.send({ status: 1, tokens });
     return;
   }
 

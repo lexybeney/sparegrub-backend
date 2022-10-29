@@ -2,11 +2,18 @@ const express = require("express");
 const router = express.Router();
 
 router.delete("/", (req, res) => {
-  console.log("Delete ran!");
+  let { currentUser } = req;
 
-  console.log(req.currentUser);
+  const indexOfToken = currentUser.tokens.findIndex((token) => {
+    token == req.headers.token;
+  });
 
-  delete req.currentUser.token;
+  console.log(req.headers.token);
+  console.log(currentUser.tokens);
+
+  console.log(indexOfToken);
+
+  // delete req.currentUser.token;
 
   res.send({ status: 1 });
 });
