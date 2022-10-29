@@ -20,7 +20,7 @@ router.post("/", (req, res) => {
     }
     const tokens = simpsons[indexOfUser].tokens;
     const token = getUniqueId(64);
-    simpsons[indexOfUser].tokens.push(token);
+    tokens.push(token);
     res.send({ status: 1, tokens });
     return;
   }
