@@ -5,15 +5,10 @@ router.delete("/", (req, res) => {
   let { currentUser } = req;
 
   const indexOfToken = currentUser.tokens.findIndex((item) => {
-    item === req.headers.token;
+    return item === req.headers.token;
   });
 
-  console.log(req.headers.token);
-  console.log(currentUser.tokens);
-
-  console.log(indexOfToken);
-
-  // delete currentUser.tokens[indexOfToken];
+  currentUser.tokens.splice(indexOfToken, 1);
 
   res.send({ status: 1 });
 });

@@ -11,7 +11,7 @@ module.exports.checkToken = (req, res, next) => {
     if (item.tokens) {
       return item.tokens.includes(headers.token);
     }
-    return;
+    // return;   //do I need return here or is it okay as it is?
   });
 
   //check the token
