@@ -24,6 +24,18 @@ const queries = {
                         VALUES
                             ("${user_id}", "${token}");`;
   },
+
+  removeToken: (token) => {
+    return `DELETE from login_tokens
+                WHERE token = "${token}";`;
+  },
+
+  getUser: (token) => {
+    return `SELECT user_name, email, phone_number, postcode, range_preference FROM users
+		        JOIN login_tokens
+        	        ON users.id = login_tokens.user_id
+            	        WHERE token = "${token}";`;
+  },
 };
 
 module.exports = queries;

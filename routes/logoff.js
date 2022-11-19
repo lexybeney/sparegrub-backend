@@ -1,14 +1,9 @@
 const express = require("express");
+const { removeToken } = require("../mysql/queries");
 const router = express.Router();
 
-router.delete("/", (req, res) => {
-  let { currentUser } = req;
-
-  const indexOfToken = currentUser.tokens.findIndex((item) => {
-    return item === req.headers.token;
-  });
-
-  currentUser.tokens.splice(indexOfToken, 1);
+router.delete("/", async (req, res) => {
+  await req.asyncMySQL(removeToken(req.headers.token));
 
   res.send({ status: 1 });
 });
