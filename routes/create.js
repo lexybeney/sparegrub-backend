@@ -1,17 +1,48 @@
 const express = require("express");
 const router = express.Router();
-const { getUniqueId } = require("../utils");
+const sha256 = require("sha256");
+const asyncMySQL = require("../mysql/connection");
+const { createUser } = require("../mysql/queries");
 
-router.post("/", (req, res) => {
-  const { quote, character, image, characterDirection } = req.body;
+router.post("/", async (req, res) => {
+  let {
+    user_name,
+    email,
+    password,
+    phone_number,
+    postcode,
+    range_preference,
+    profile_picture,
+  } = req.body;
 
   //check we have all the data
-  if (quote && character && image && characterDirection) {
-    //append a random id
-    req.body.id = getUniqueId(64);
-    //append the body to the simpsons array
-    req.simpsons.push(req.body);
-    res.send({ status: 1 });
+  if (
+    user_name &&
+    email &&
+    password &&
+    phone_number &&
+    postcode &&
+    range_preference
+  ) {
+    //hash the password
+    password = sha256(process.env.SALT + password);
+
+    const results = await asyncMySQL(
+      createUser(
+        user_name,
+        email,
+        password,
+        phone_number,
+        postcode,
+        range_preference
+      )
+    );
+
+    if (results.affectedRows === 1) {
+      res.send({ status: 1 });
+    } else {
+      res.send({ status: 0, error: "SQL said no" });
+    }
     return;
   }
 
