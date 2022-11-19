@@ -1,26 +1,20 @@
-module.exports.checkToken = (req, res, next) => {
-  const { simpsons, headers } = req;
+const { checkToken } = require("../mysql/queries");
 
-  //important in case token is not set!
-  if (!headers.token) {
+module.exports.checkToken = async (req, res, next) => {
+  const { token } = req.headers;
+
+  //if not token set
+  if (!token) {
     res.send({ status: 0, error: "Token not set!" });
-  }
-
-  //find the user
-  const indexOfItem = simpsons.findIndex((item) => {
-    if (item.tokens) {
-      return item.tokens.includes(headers.token);
-    }
-    // return;   //do I need return here or is it okay as it is?
-  });
-
-  //check the token
-  if (indexOfItem === -1) {
-    res.send({ status: 0, error: "Token not valid!" });
     return;
   }
 
-  req.currentUser = simpsons[indexOfItem];
+  const results = await req.asyncMySQL(checkToken(token));
 
-  next();
+  if (results.length) {
+    next();
+    return;
+  }
+
+  res.send({ status: 0, error: "Invalid token" });
 };
