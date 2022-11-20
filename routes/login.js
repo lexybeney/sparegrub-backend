@@ -13,11 +13,16 @@ router.post("/", async (req, res) => {
     return;
   }
 
+  if (user_name.includes("%")) {
+    res.send({ status: 0, error: "Hacker detected" });
+    return;
+  }
+
   //hash password
   password = sha256(process.env.SALT + password);
 
   //check creds from the database of users
-  const results = await req.asyncMySQL(checkCreds(user_name, password));
+  const results = await req.asyncMySQL(checkCreds(), [user_name, password]);
 
   //if creds dont match
   if (results.length === 0) {
@@ -28,7 +33,7 @@ router.post("/", async (req, res) => {
   //if the user/password match then generate a token for the user
   const token = getUniqueId(64);
 
-  await req.asyncMySQL(addToken(results[0].id, token));
+  await req.asyncMySQL(addToken(), [results[0].id, token]);
 
   res.send({ status: 1, token });
   return;

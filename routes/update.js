@@ -14,32 +14,48 @@ router.put("/", async (req, res) => {
   } = req.body;
 
   if (email && typeof email === "string") {
-    await req.asyncMySQL(updateUser(req.headers.token, "email", email));
+    await req.asyncMySQL(updateUser(), ["email", email, req.headers.token]);
   }
 
   if (user_name && typeof user_name === "string") {
-    await req.asyncMySQL(updateUser(req.headers.token, "user_name", user_name));
+    await req.asyncMySQL(updateUser(), [
+      "user_name",
+      user_name,
+      req.headers.token,
+    ]);
   }
 
   if (phone_number && typeof phone_number === "string") {
-    await req.asyncMySQL(
-      updateUser(req.headers.token, "phone_number", phone_number)
-    );
+    await req.asyncMySQL(updateUser(), [
+      "phone_number",
+      phone_number,
+      req.headers.token,
+    ]);
   }
 
   if (postcode && typeof postcode === "string") {
-    await req.asyncMySQL(updateUser(req.headers.token, "postcode", postcode));
+    await req.asyncMySQL(updateUser(), [
+      "postcode",
+      postcode,
+      req.headers.token,
+    ]);
   }
 
   if (range_preference && typeof range_preference === "string") {
-    await req.asyncMySQL(
-      updateUser(req.headers.token, "range_preference", range_preference)
-    );
+    await req.asyncMySQL(updateUser(), [
+      "range_preference",
+      range_preference,
+      req.headers.token,
+    ]);
   }
 
   if (password && typeof password === "string") {
     password = sha256(process.env.SALT + password);
-    await req.asyncMySQL(updateUser(req.headers.token, "password", password));
+    await req.asyncMySQL(updateUser(), [
+      "password",
+      password,
+      req.headers.token,
+    ]);
   }
 
   res.send({ status: 1 });

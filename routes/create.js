@@ -27,16 +27,16 @@ router.post("/", async (req, res) => {
     //hash the password
     password = sha256(process.env.SALT + password);
 
-    const results = await asyncMySQL(
-      createUser(
-        user_name,
-        email,
-        password,
-        phone_number,
-        postcode,
-        range_preference
-      )
-    );
+    const results = await asyncMySQL(createUser(), [
+      user_name,
+      email,
+      password,
+      phone_number,
+      postcode,
+      range_preference,
+    ]);
+
+    console.log(results);
 
     if (results.affectedRows === 1) {
       res.send({ status: 1 });

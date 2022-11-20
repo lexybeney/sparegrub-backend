@@ -9,7 +9,7 @@ module.exports.checkToken = async (req, res, next) => {
     return;
   }
 
-  const results = await req.asyncMySQL(checkToken(token));
+  const results = await req.asyncMySQL(checkToken(), [token]);
 
   if (results.length) {
     next();
