@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const sha256 = require("sha256");
+const sendEmail = require("../emails/sib");
+const welcomeEmail = require("../emails/templates/welcome");
 const asyncMySQL = require("../mysql/connection");
 const { createUser } = require("../mysql/queries");
 
@@ -39,9 +41,17 @@ router.post("/", async (req, res) => {
     console.log(results);
 
     if (results.affectedRows === 1) {
+      //send welcome email
+      sendEmail(
+        email,
+        user_name,
+        "Welcome to SpareGrub!",
+        welcomeEmail(user_name)
+      );
+
       res.send({ status: 1 });
     } else {
-      res.send({ status: 0, error: "SQL said no" });
+      res.send({ status: 0, error: "Duplicate entry" });
     }
     return;
   }
