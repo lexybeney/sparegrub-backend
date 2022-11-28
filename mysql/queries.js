@@ -6,6 +6,13 @@ const queries = {
                         (?, ?, ?, ?, ?, ?);`;
   },
 
+  createItem: () => {
+    return `INSERT listed_items
+	            (user_id, item_name, quantity, extra_details, collection_location, collection_details, status)
+    	            VALUES 
+        	            (?, ?, ?, ?, ?, ?, ?);`;
+  },
+
   checkCreds: () => {
     return `SELECT id FROM users
                 WHERE user_name LIKE ? 
@@ -26,9 +33,14 @@ const queries = {
 
   getUser: () => {
     return `SELECT user_name, email, phone_number, postcode, range_preference FROM users
-		        JOIN login_tokens
+		          JOIN login_tokens
         	        ON users.id = login_tokens.user_id
             	        WHERE token = ?;`;
+  },
+
+  getUserId: () => {
+    return `SELECT user_id FROM login_tokens
+	            WHERE token = ?;`;
   },
 
   deleteUser: () => {
