@@ -1,9 +1,9 @@
 const express = require("express");
-const { updateUser } = require("../mysql/queries");
+const { updateUser, updateItem } = require("../mysql/queries");
 const router = express.Router();
 const sha256 = require("sha256");
 
-router.put("/", async (req, res) => {
+router.put("/user", async (req, res) => {
   const {
     email,
     user_name,
@@ -59,6 +59,20 @@ router.put("/", async (req, res) => {
   }
 
   res.send({ status: 1 });
+});
+
+router.put("/item", async (req, res) => {
+  const { status, id } = req.body;
+
+  if (status && typeof status === "string" && id && typeof id === "number") {
+    await req.asyncMySQL(updateItem(), ["status", status, id]);
+    res.send({ status: 1 });
+    return;
+  }
+  res.send({
+    status: 0,
+    error: "Missing data, check item id and status included in the request",
+  });
 });
 
 module.exports = router;

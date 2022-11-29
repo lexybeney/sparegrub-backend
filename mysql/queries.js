@@ -38,6 +38,15 @@ const queries = {
             	        WHERE token = ?;`;
   },
 
+  getUserListing: () => {
+    return `SELECT listed_items.id AS item_id, item_name, quantity, extra_details, collection_location, collection_details, date_added, status  
+              FROM login_tokens
+	              JOIN users ON login_tokens.user_id = users.id
+        	         JOIN listed_items ON users.id = listed_items.user_id
+            		      WHERE token = ?
+							           ORDER BY listed_items.date_added  ASC`;
+  },
+
   getUserId: () => {
     return `SELECT user_id FROM login_tokens
 	            WHERE token = ?;`;
@@ -49,10 +58,27 @@ const queries = {
     	            WHERE token = ?;`;
   },
 
+  deleteUserTokens: () => {
+    return `DELETE tokens FROM users
+	            JOIN login_tokens ON users.id = login_tokens.user_id
+    	            WHERE token = ?;`;
+  },
+
+  deleteItem: () => {
+    return `DELETE FROM listed_items
+	            WHERE listed_items.id = ?;`;
+  },
+
   updateUser: () => {
     return `UPDATE users JOIN login_tokens ON users.id = login_tokens.user_id  
                 SET ?? = ?  
                     WHERE token = ?;`;
+  },
+
+  updateItem: () => {
+    return `UPDATE listed_items 
+              SET ?? = ?
+                WHERE listed_items.id = ?;`;
   },
 
   checkToken: () => {
