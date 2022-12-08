@@ -38,8 +38,6 @@ router.post("/user", async (req, res) => {
       range_preference,
     ]);
 
-    console.log(results);
-
     if (results.affectedRows === 1) {
       //send welcome email
       // sendEmail(

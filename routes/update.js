@@ -62,17 +62,79 @@ router.put("/user", async (req, res) => {
 });
 
 router.put("/item", async (req, res) => {
-  const { status, id } = req.body;
+  const {
+    status,
+    id,
+    item_name,
+    quantity,
+    extra_details,
+    collection_location,
+    collection_details,
+  } = req.body;
+
+  if (!id) {
+    res.send({ status: 0, error: "Missing item id" });
+    return;
+  }
 
   if (status && typeof status === "string" && id && typeof id === "number") {
     await req.asyncMySQL(updateItem(), ["status", status, id]);
-    res.send({ status: 1 });
-    return;
   }
-  res.send({
-    status: 0,
-    error: "Missing data, check item id and status included in the request",
-  });
+
+  if (
+    item_name &&
+    typeof item_name === "string" &&
+    id &&
+    typeof id === "number"
+  ) {
+    await req.asyncMySQL(updateItem(), ["item_name", item_name, id]);
+  }
+
+  if (
+    quantity &&
+    typeof quantity === "string" &&
+    id &&
+    typeof id === "number"
+  ) {
+    await req.asyncMySQL(updateItem(), ["quantity", quantity, id]);
+  }
+
+  if (
+    extra_details &&
+    typeof extra_details === "string" &&
+    id &&
+    typeof id === "number"
+  ) {
+    await req.asyncMySQL(updateItem(), ["extra_details", extra_details, id]);
+  }
+
+  if (
+    collection_location &&
+    typeof collection_location === "string" &&
+    id &&
+    typeof id === "number"
+  ) {
+    await req.asyncMySQL(updateItem(), [
+      "collection_location",
+      collection_location,
+      id,
+    ]);
+  }
+
+  if (
+    collection_details &&
+    typeof collection_details === "string" &&
+    id &&
+    typeof id === "number"
+  ) {
+    await req.asyncMySQL(updateItem(), [
+      "collection_details",
+      collection_details,
+      id,
+    ]);
+  }
+
+  res.send({ status: 1 });
 });
 
 module.exports = router;
