@@ -7,15 +7,8 @@ const asyncMySQL = require("../mysql/connection");
 const { createUser, createItem, getUserId } = require("../mysql/queries");
 
 router.post("/user", async (req, res) => {
-  let {
-    user_name,
-    email,
-    password,
-    phone_number,
-    postcode,
-    range_preference,
-    profile_picture,
-  } = req.body;
+  let { user_name, email, password, phone_number, postcode, range_preference } =
+    req.body;
 
   //check we have all the data
   if (
