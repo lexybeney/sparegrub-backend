@@ -18,7 +18,7 @@ function asyncMySQL(query, vars) {
           "Connection to server failed, check server is running",
           error
         );
-        reject("SQL not accepted");
+        reject(error);
       }
       resolve(results);
     });
