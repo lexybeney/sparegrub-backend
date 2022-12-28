@@ -5,6 +5,10 @@ const { checkToken } = require("./middleware/auth");
 const { addToLog } = require("./middleware/logging");
 const asyncMySQL = require("./mysql/connection");
 const checkDbStatus = require("./tests/sql");
+const cors = require("cors");
+
+//send cors in header
+app.use(cors());
 
 //check db status
 checkDbStatus(asyncMySQL);
