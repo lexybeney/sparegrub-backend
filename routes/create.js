@@ -39,17 +39,16 @@ router.post("/user", async (req, res) => {
       ]);
       if (results.affectedRows === 1) {
         //   //send welcome email
-        //   sendEmail(
-        //     email,
-        //     user_name,
-        //     "Welcome to SpareGrub!",
-        //     welcomeEmail(user_name)
-        //   );
+        sendEmail(
+          email,
+          user_name,
+          "Welcome to SpareGrub!",
+          welcomeEmail(user_name)
+        );
         const token = getUniqueId(64);
         await req.asyncMySQL(addToken(), [results.insertId, token]);
         res.send({ status: 1, token });
       } else {
-        console.log(results[1][0].Message);
         res.send({ status: 0, error: `${results[1][0].Message}` });
       }
     } catch (error) {
