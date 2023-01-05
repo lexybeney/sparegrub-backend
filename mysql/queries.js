@@ -3,7 +3,8 @@ const queries = {
     return `INSERT IGNORE users
                 (user_name, email, password, phone_number, postcode, range_preference)
                     VALUES
-                        (?, ?, ?, ?, ?, ?);`;
+                        (?, ?, ?, ?, ?, ?);
+            SHOW WARNINGS;`;
   },
 
   createItem: () => {

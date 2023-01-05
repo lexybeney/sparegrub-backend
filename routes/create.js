@@ -4,7 +4,13 @@ const sha256 = require("sha256");
 const sendEmail = require("../emails/sib");
 const welcomeEmail = require("../emails/templates/welcome");
 const asyncMySQL = require("../mysql/connection");
-const { createUser, createItem, getUserId } = require("../mysql/queries");
+const {
+  createUser,
+  createItem,
+  getUserId,
+  addToken,
+} = require("../mysql/queries");
+const { getUniqueId } = require("../utils");
 
 router.post("/user", async (req, res) => {
   let { user_name, email, password, phone_number, postcode, range_preference } =
@@ -22,28 +28,34 @@ router.post("/user", async (req, res) => {
     //hash the password
     password = sha256(process.env.SALT + password);
 
-    const results = await asyncMySQL(createUser(), [
-      user_name,
-      email,
-      password,
-      phone_number,
-      postcode,
-      range_preference,
-    ]);
-
-    if (results.affectedRows === 1) {
-      //send welcome email
-      // sendEmail(
-      //   email,
-      //   user_name,
-      //   "Welcome to SpareGrub!",
-      //   welcomeEmail(user_name)
-      // );
-
-      res.send({ status: 1 });
-    } else {
-      res.send({ status: 0, error: "Duplicate entry" });
+    try {
+      const results = await asyncMySQL(createUser(), [
+        user_name,
+        email,
+        password,
+        phone_number,
+        postcode,
+        range_preference,
+      ]);
+      if (results.affectedRows === 1) {
+        //   //send welcome email
+        //   sendEmail(
+        //     email,
+        //     user_name,
+        //     "Welcome to SpareGrub!",
+        //     welcomeEmail(user_name)
+        //   );
+        const token = getUniqueId(64);
+        await req.asyncMySQL(addToken(), [results.insertId, token]);
+        res.send({ status: 1, token });
+      } else {
+        console.log(results[1][0].Message);
+        res.send({ status: 0, error: `${results[1][0].Message}` });
+      }
+    } catch (error) {
+      console.log(error.sqlMessage);
     }
+
     return;
   }
 
