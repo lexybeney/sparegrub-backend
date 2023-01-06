@@ -28,36 +28,32 @@ router.post("/user", async (req, res) => {
     //hash the password
     password = sha256(process.env.SALT + password);
 
-    try {
-      const results = await asyncMySQL(createUser(), [
-        user_name,
-        email,
-        password,
-        phone_number,
-        postcode,
-        range_preference,
-      ]);
-      if (results.affectedRows === 1) {
-        //   //send welcome email
-        sendEmail(
-          email,
-          user_name,
-          "Welcome to SpareGrub!",
-          welcomeEmail(user_name)
-        );
-        const token = getUniqueId(64);
-        await req.asyncMySQL(addToken(), [results.insertId, token]);
-        res.send({ status: 1, token });
-      } else {
-        res.send({ status: 0, error: `${results[1][0].Message}` });
-      }
-    } catch (error) {
-      console.log(error.sqlMessage);
-    }
+    const results = await asyncMySQL(createUser(), [
+      user_name,
+      email,
+      password,
+      phone_number,
+      postcode,
+      range_preference,
+    ]);
 
+    if (results[0].affectedRows === 1) {
+      //send welcome email
+      sendEmail(
+        email,
+        user_name,
+        "Welcome to SpareGrub!",
+        welcomeEmail(user_name)
+      );
+      console.log("All correct");
+      const token = getUniqueId(64);
+      await req.asyncMySQL(addToken(), [results[0].insertId, token]);
+      res.send({ status: 1, token });
+    } else {
+      res.send({ status: 0, error: `${results[1][0].Message}` });
+    }
     return;
   }
-
   res.send({ status: 0, error: "Some data missing" });
 });
 
