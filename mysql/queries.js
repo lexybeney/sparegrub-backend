@@ -45,7 +45,12 @@ const queries = {
 	              JOIN users ON login_tokens.user_id = users.id
         	         JOIN listed_items ON users.id = listed_items.user_id
             		      WHERE token = ?
-							           ORDER BY listed_items.date_added  ASC`;
+							           ORDER BY listed_items.date_added  ASC;`;
+  },
+
+  getAllListedItems: () => {
+    return `SELECT * FROM listed_items
+	              WHERE status = "available";`;
   },
 
   getUserId: () => {
