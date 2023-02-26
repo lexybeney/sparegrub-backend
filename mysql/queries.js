@@ -15,7 +15,7 @@ const queries = {
   },
 
   addToBasket: () => {
-    return ` INSERT INTO in_basket 
+    return ` REPLACE INTO in_basket 
               (user_id, item_id) 
                   VALUES (?, ?);`;
   },
