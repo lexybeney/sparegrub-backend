@@ -55,7 +55,7 @@ const queries = {
   },
 
   getAllListedItems: () => {
-    return `SELECT listed_items.id as item_id, listed_items.user_id as user_listed_item, item_name, quantity, extra_details, collection_location, collection_details, date_added as date_item_listed, status, in_basket.user_id as user_in_basket, in_basket.item_id, date_added_to_basket 
+    return `SELECT listed_items.id as item_id, listed_items.user_id as user_listed_item, item_name, quantity, extra_details, collection_location, collection_details, date_added as date_item_listed, status, in_basket.user_id as user_in_basket, date_added_to_basket 
             	FROM listed_items
                 LEFT JOIN in_basket
                   ON listed_items.id = in_basket.item_id
