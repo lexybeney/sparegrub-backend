@@ -27,10 +27,16 @@ router.get("/listing", async (req, res) => {
 });
 
 router.get("/available-items", async (req, res) => {
-  const results = await req.asyncMySQL(getAllListedItems());
+  const results = await req.asyncMySQL(getAllListedItems(), [
+    req.headers.user_id,
+  ]);
 
   if (results.length === 0) {
-    res.send({ status: 0, error: "No available items" });
+    if (req.headers.user_id === undefined) {
+      res.send({ status: 0, error: "No user id sent in the header" });
+      return;
+    }
+    res.send({ status: 0, error: "No available items for this user" });
     return;
   }
   res.send({ status: 1, results });

@@ -9,6 +9,7 @@ const {
   createItem,
   getUserId,
   addToken,
+  addToBasket,
 } = require("../mysql/queries");
 const { getUniqueId } = require("../utils");
 
@@ -91,6 +92,27 @@ router.post("/item", async (req, res) => {
   }
 
   res.send({ status: 0, error: "Some data missing" });
+});
+
+router.post("/in_basket", async (req, res) => {
+  const { user_id, item_id } = req.body;
+
+  //check we have all the data
+
+  if (user_id && item_id) {
+    const result = await asyncMySQL(addToBasket(), [user_id, item_id]);
+    console.log(result);
+    if (result.affectedRows === 1) {
+      res.send({ status: 1 });
+    } else {
+      res.send({ status: 0, error: "Error adding item to basket" });
+    }
+  } else {
+    res.send({
+      status: 0,
+      error: "Some data missing - user id and item id required",
+    });
+  }
 });
 
 module.exports = router;

@@ -14,6 +14,12 @@ const queries = {
         	            (?, ?, ?, ?, ?, ?, ?);`;
   },
 
+  addToBasket: () => {
+    return ` INSERT INTO in_basket 
+              (user_id, item_id) 
+                  VALUES (?, ?);`;
+  },
+
   checkCreds: () => {
     return `SELECT id FROM users
                 WHERE user_name LIKE ? 
@@ -50,7 +56,8 @@ const queries = {
 
   getAllListedItems: () => {
     return `SELECT * FROM listed_items
-	              WHERE status = "available";`;
+	              WHERE status = "available"
+                    AND user_id != ?;`;
   },
 
   getUserId: () => {
