@@ -59,7 +59,7 @@ const queries = {
             	FROM listed_items
                 LEFT JOIN in_basket
                   ON listed_items.id = in_basket.item_id
-			  		      	WHERE (status = 'available' OR date_added_to_basket < NOW() - INTERVAL 1 HOUR) AND listed_items.user_id != ?;`;
+			  		      	WHERE (status = 'available' OR (status = 'in_basket' AND date_added_to_basket < NOW() - INTERVAL 1 HOUR)) AND listed_items.user_id != ?;`;
   },
 
   // getAllListedItems: () => {
