@@ -3,6 +3,7 @@ const {
   getUser,
   getUserListing,
   getAllListedItems,
+  getUserBasket,
 } = require("../mysql/queries");
 const router = express.Router();
 
@@ -27,15 +28,30 @@ router.get("/listing", async (req, res) => {
 });
 
 router.get("/available-items", async (req, res) => {
+  if (req.headers.user_id === undefined) {
+    res.send({ status: 0, error: "No user id sent in the header" });
+    return;
+  }
+
   const results = await req.asyncMySQL(getAllListedItems(), [
     req.headers.user_id,
   ]);
 
   if (results.length === 0) {
-    if (req.headers.user_id === undefined) {
-      res.send({ status: 0, error: "No user id sent in the header" });
-      return;
-    }
+    res.send({ status: 0, error: "No available items for this user" });
+    return;
+  }
+  res.send({ status: 1, results });
+});
+
+router.get("/user_basket", async (req, res) => {
+  if (req.headers.user_id === undefined) {
+    res.send({ status: 0, error: "No user id sent in the header" });
+    return;
+  }
+  const results = await req.asyncMySQL(getUserBasket(), [req.headers.user_id]);
+
+  if (results.length === 0) {
     res.send({ status: 0, error: "No available items for this user" });
     return;
   }

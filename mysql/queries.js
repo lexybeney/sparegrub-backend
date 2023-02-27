@@ -62,15 +62,17 @@ const queries = {
 			  		      	WHERE (status = 'available' OR (status = 'in_basket' AND date_added_to_basket < NOW() - INTERVAL 1 HOUR)) AND listed_items.user_id != ?;`;
   },
 
-  // getAllListedItems: () => {
-  //   return `SELECT * FROM listed_items
-  //               WHERE status = "available"
-  //                   AND user_id != ?;`;
-  // },
-
   getUserId: () => {
     return `SELECT user_id FROM login_tokens
 	            WHERE token = ?;`;
+  },
+
+  getUserBasket: () => {
+    return `SELECT in_basket.user_id,date_added_to_basket,listed_items.user_id as user_listed_id,listed_items.id as item_id,item_name,quantity,extra_details,collection_location,collection_details,date_added as date_item_listed,listed_items.status 
+              FROM in_basket JOIN listed_items 
+                ON in_basket.item_id = listed_items.id 
+                  WHERE in_basket.user_id = ? AND listed_items.status = 'in_basket' AND date_added_to_basket > NOW() - INTERVAL 1 HOUR 
+                    ORDER BY date_added_to_basket ASC;`;
   },
 
   deleteUser: () => {
