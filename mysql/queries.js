@@ -68,7 +68,7 @@ const queries = {
   },
 
   getUserBasket: () => {
-    return `SELECT in_basket.user_id,date_added_to_basket,listed_items.user_id as user_listed_id,listed_items.id as item_id,item_name,quantity,extra_details,collection_location,collection_details,date_added as date_item_listed,listed_items.status 
+    return `SELECT date_added_to_basket,listed_items.id as item_id,item_name,quantity,extra_details,collection_location,collection_details,date_added as date_item_listed
               FROM in_basket JOIN listed_items 
                 ON in_basket.item_id = listed_items.id 
                   WHERE in_basket.user_id = ? AND listed_items.status = 'in_basket' AND date_added_to_basket > NOW() - INTERVAL 1 HOUR 
