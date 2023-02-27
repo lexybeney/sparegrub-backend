@@ -101,10 +101,10 @@ router.post("/in_basket", async (req, res) => {
 
   if (user_id && item_id) {
     const result = await asyncMySQL(addToBasket(), [user_id, item_id]);
-    console.log(result);
-    if (result.affectedRows === 1) {
+    if (result.affectedRows === 1 || 2) {
       res.send({ status: 1 });
     } else {
+      console.log(result);
       res.send({ status: 0, error: "Error adding item to basket" });
     }
   } else {
