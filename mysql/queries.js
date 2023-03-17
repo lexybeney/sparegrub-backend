@@ -50,8 +50,8 @@ const queries = {
               FROM login_tokens
 	              JOIN users ON login_tokens.user_id = users.id
         	         JOIN listed_items ON users.id = listed_items.user_id
-            		      WHERE token = ? AND status = "available"
-							           ORDER BY listed_items.date_added  ASC;`;
+            		      WHERE token = ? AND (status = "available" OR status = "collected")
+							           ORDER BY listed_items.date_added  DESC;`;
   },
 
   getAllListedItems: () => {

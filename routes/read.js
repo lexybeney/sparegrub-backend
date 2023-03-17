@@ -24,7 +24,16 @@ router.get("/listing", async (req, res) => {
     res.send({ status: 0, error: "No items found for this user" });
     return;
   }
-  res.send({ status: 1, results });
+  const availableItems = [];
+  const itemsToBeCollected = [];
+  results.map((item) => {
+    if (item.status === "available") {
+      availableItems.push(item);
+    } else {
+      itemsToBeCollected.push(item);
+    }
+  });
+  res.send({ status: 1, availableItems, itemsToBeCollected });
 });
 
 router.get("/available-items", async (req, res) => {
