@@ -76,6 +76,8 @@ router.post("/item", async (req, res) => {
     extra_details,
     collection_location,
     collection_details,
+    latitude,
+    longitude,
   } = req.body;
 
   //check we have all the data
@@ -92,6 +94,8 @@ router.post("/item", async (req, res) => {
       collection_location,
       collection_details,
       status,
+      latitude,
+      longitude,
     ]);
 
     if (results.affectedRows === 1) {
