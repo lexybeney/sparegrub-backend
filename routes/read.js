@@ -15,6 +15,7 @@ router.get("/user", async (req, res) => {
     return;
   }
   res.send({ status: 1, results });
+  console.log(results);
 });
 
 router.get("/listing", async (req, res) => {
