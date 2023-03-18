@@ -1,9 +1,9 @@
 const queries = {
   createUser: () => {
     return `INSERT IGNORE users
-                (user_name, email, password, phone_number, postcode, range_preference)
+                (user_name, email, password, phone_number, postcode, latitude, longitude, range_preference)
                     VALUES
-                        (?, ?, ?, ?, ?, ?);
+                        (?, ?, ?, ?, ?, ?, ?, ?);
                           SHOW WARNINGS;`;
   },
 

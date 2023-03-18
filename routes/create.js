@@ -14,8 +14,16 @@ const {
 const { getUniqueId } = require("../utils");
 
 router.post("/user", async (req, res) => {
-  let { user_name, email, password, phone_number, postcode, range_preference } =
-    req.body;
+  let {
+    user_name,
+    email,
+    password,
+    phone_number,
+    postcode,
+    latitude,
+    longitude,
+    range_preference,
+  } = req.body;
 
   //check we have all the data
   if (
@@ -35,17 +43,20 @@ router.post("/user", async (req, res) => {
       password,
       phone_number,
       postcode,
+      latitude,
+      longitude,
       range_preference,
     ]);
 
     if (results[0].affectedRows === 1) {
-      //send welcome email
+      // send welcome email
       sendEmail(
         email,
         user_name,
         "Welcome to SpareGrub!",
         welcomeEmail(user_name)
       );
+      console.log(results);
       console.log("All correct");
       const token = getUniqueId(64);
       await req.asyncMySQL(addToken(), [results[0].insertId, token]);
