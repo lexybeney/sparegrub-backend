@@ -1,7 +1,13 @@
 const express = require("express");
-const { updateUser, updateItem } = require("../mysql/queries");
+const {
+  updateUser,
+  updateItem,
+  getItemUserDetails,
+} = require("../mysql/queries");
 const router = express.Router();
 const sha256 = require("sha256");
+const sendEmail = require("../emails/sib");
+const collectItemEmail = require("../emails/templates/collectItem");
 
 router.put("/user", async (req, res) => {
   const {
@@ -79,6 +85,26 @@ router.put("/item", async (req, res) => {
 
   if (status && typeof status === "string" && id && typeof id === "number") {
     await req.asyncMySQL(updateItem(), ["status", status, id]);
+
+    if (status === "collected") {
+      const { email: collectorEmail, username: collectorUsername } =
+        req.headers;
+      const result = await req.asyncMySQL(getItemUserDetails(), [id]);
+      sendEmail(
+        collectorEmail,
+        collectorUsername,
+        "Your item collection details",
+        collectItemEmail(
+          collectorUsername,
+          item_name,
+          quantity,
+          result[0].listerUsername,
+          result[0].listerPostcode,
+          result[0].listerPhone,
+          collection_details
+        )
+      );
+    }
   }
 
   if (
