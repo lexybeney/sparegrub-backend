@@ -4,7 +4,7 @@
 
 ## The concept
 
-As part of my software development bootcamp, I had to come up with an idea for my final project to demonstrate my understanding of Node.js and servers. [SpareGrub](https://sparegrub.co.uk) was created as my answer to reducing food wastage.
+As part of my software development bootcamp, I had to come up with an idea for my final project to demonstrate my understanding of servers, APIs and databases. [SpareGrub](https://sparegrub.co.uk) was created as my answer to reducing food wastage.
 
 This is the backend repo, for the frontend repo click [here](https://github.com/lexybeney/sparegrub-frontend).
 
