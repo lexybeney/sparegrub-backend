@@ -20,7 +20,7 @@ This is the backend repo, for the frontend repo click [here](https://github.com/
 - Self-built authorisation system and token generation
 - RESTful API
 - Password hashing using sha256
-- Connected to a hosted MySQL server
+- Connected to a MySQL server
 - Third party integration to send emails on signup and checkout
 - Prepared statements to prevent against SQL injection
 
@@ -39,3 +39,26 @@ git clone https://github.com/lexybeney/sparegrub-backend.git
 ```bash
 npm start
 ```
+
+## API Endpoints and methods
+
+No authorisation needed:
+
+| **Methods** |     **URLs**      |       **Actions**       |
+| :---------- | :---------------: | :---------------------: |
+| POST        |   /create/user    |       create user       |
+| POST        |   /create/item    |    create user item     |
+| POST        | /create/in_basket | add item to user basket |
+| POST        |      /login       |       user login        |
+
+Authorisation required:
+
+| **Methods** |       **URLs**        |     **Actions**     |
+| :---------- | :-------------------: | :-----------------: |
+| GET         |      /read/user       |  get user profile   |
+| GET         |     /read/listing     |  get user listing   |
+| GET         | /read/available_items |    get all items    |
+| GET         |   /read/user_basket   |   get user basket   |
+| PUT         |     /update/user      | update user profile |
+| PUT         |     /update/item      | update item details |
+| DELETE      |        /logoff        |  remove user token  |
