@@ -10,9 +10,8 @@ This is the backend repo, for the frontend repo click [here](https://github.com/
 
 ## What I used
 
-- Node.js (Express)
+- Node.js ([Express](https://github.com/expressjs/express))
 - MySQL
-- CORS
 - Send-in-blue (third party email sending)
 
 ## Main features
