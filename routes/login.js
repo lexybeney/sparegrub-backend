@@ -13,11 +13,6 @@ router.post("/", async (req, res) => {
     return;
   }
 
-  if (user_name.includes("%")) {
-    res.send({ status: 0, error: "Hacker detected" });
-    return;
-  }
-
   //hash password
   password = sha256(process.env.SALT + password);
 
@@ -36,7 +31,6 @@ router.post("/", async (req, res) => {
   await req.asyncMySQL(addToken(), [results[0].id, token]);
 
   res.send({ status: 1, token });
-  return;
 });
 
 module.exports = router;

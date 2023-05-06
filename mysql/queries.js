@@ -9,9 +9,9 @@ const queries = {
 
   createItem: () => {
     return `INSERT listed_items
-	            (user_id, item_name, quantity, extra_details, collection_location, collection_details, status, latitude, longitude)
+	            (user_id, item_name, quantity, extra_details, collection_location, collection_details, latitude, longitude)
     	            VALUES 
-        	            (?, ?, ?, ?, ?, ?, ?, ?, ?);`;
+        	            (?, ?, ?, ?, ?, ?, ?, ?);`;
   },
 
   addToBasket: () => {

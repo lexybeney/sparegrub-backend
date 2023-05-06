@@ -19,11 +19,11 @@ router.put("/user", async (req, res) => {
     range_preference,
   } = req.body;
 
-  if (email && typeof email === "string") {
+  if (email) {
     await req.asyncMySQL(updateUser(), ["email", email, req.headers.token]);
   }
 
-  if (user_name && typeof user_name === "string") {
+  if (user_name) {
     await req.asyncMySQL(updateUser(), [
       "user_name",
       user_name,
@@ -31,7 +31,7 @@ router.put("/user", async (req, res) => {
     ]);
   }
 
-  if (phone_number && typeof phone_number === "string") {
+  if (phone_number) {
     await req.asyncMySQL(updateUser(), [
       "phone_number",
       phone_number,
@@ -39,7 +39,7 @@ router.put("/user", async (req, res) => {
     ]);
   }
 
-  if (postcode && typeof postcode === "string") {
+  if (postcode) {
     await req.asyncMySQL(updateUser(), [
       "postcode",
       postcode,
@@ -47,7 +47,7 @@ router.put("/user", async (req, res) => {
     ]);
   }
 
-  if (range_preference && typeof range_preference === "string") {
+  if (range_preference) {
     await req.asyncMySQL(updateUser(), [
       "range_preference",
       range_preference,
@@ -55,7 +55,7 @@ router.put("/user", async (req, res) => {
     ]);
   }
 
-  if (password && typeof password === "string") {
+  if (password) {
     password = sha256(process.env.SALT + password);
     await req.asyncMySQL(updateUser(), [
       "password",
@@ -83,12 +83,13 @@ router.put("/item", async (req, res) => {
     return;
   }
 
-  if (status && typeof status === "string" && id && typeof id === "number") {
+  if (status && id) {
     await req.asyncMySQL(updateItem(), ["status", status, id]);
 
     if (status === "collected") {
       const { email: collectorEmail, username: collectorUsername } =
         req.headers;
+      console.log(item_name, quantity);
       const result = await req.asyncMySQL(getItemUserDetails(), [id]);
       sendEmail(
         collectorEmail,

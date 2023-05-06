@@ -12,6 +12,7 @@ const {
   addToBasket,
 } = require("../mysql/queries");
 const { getUniqueId } = require("../utils");
+const { WELCOME_EMAIL_SUBJECT } = require("../config");
 
 router.post("/user", async (req, res) => {
   let {
@@ -53,11 +54,10 @@ router.post("/user", async (req, res) => {
       sendEmail(
         email,
         user_name,
-        "Welcome to SpareGrub!",
+        WELCOME_EMAIL_SUBJECT,
         welcomeEmail(user_name)
       );
-      console.log(results);
-      console.log("All correct");
+
       const token = getUniqueId(64);
       await req.asyncMySQL(addToken(), [results[0].insertId, token]);
       res.send({ status: 1, token });
@@ -82,7 +82,6 @@ router.post("/item", async (req, res) => {
 
   //check we have all the data
   if (item_name && quantity && collection_location) {
-    const status = "available";
     const user_id = await asyncMySQL(getUserId(), req.headers.token);
 
     //send to database
@@ -93,7 +92,6 @@ router.post("/item", async (req, res) => {
       extra_details,
       collection_location,
       collection_details,
-      status,
       latitude,
       longitude,
     ]);
@@ -116,7 +114,7 @@ router.post("/in_basket", async (req, res) => {
 
   if (user_id && item_id) {
     const result = await asyncMySQL(addToBasket(), [user_id, item_id]);
-    if (result.affectedRows === 1 || 2) {
+    if (result.affectedRows === 1 || result.affectedRows === 2) {
       res.send({ status: 1 });
     } else {
       console.log(result);
